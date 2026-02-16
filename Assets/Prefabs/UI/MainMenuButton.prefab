@@ -152,7 +152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7661689564737929830
 RectTransform:
   m_ObjectHideFlags: 0
@@ -167,9 +167,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3709245119955900249}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 35, y: -35}
   m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4564429605526076937
@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 3709245119955900249}
   - component: {fileID: 3686520479769250286}
   - component: {fileID: 6434096029784189968}
+  - component: {fileID: 82817647414899847}
   m_Layer: 5
   m_Name: MainMenuButton
   m_TagString: Untagged
@@ -310,3 +311,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &82817647414899847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9006637586661015372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667b59e5ecef46441a6944d29cc75db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movingStar: {fileID: 642971790805951909}
