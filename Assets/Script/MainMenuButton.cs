@@ -10,8 +10,8 @@ public class MainMenuButton : MonoBehaviour,IPointerDownHandler,IPointerEnterHan
     //Detect if the Cursor starts to pass over the GameObject
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        transform.localScale = new Vector3(1.5f,1.5f,1.5f);
-        transform.localPosition += new Vector3(40,0,0);
+        transform.localScale = new Vector3(1.1f,1.1f,1.1f);
+        movingStar.SetActive(true);
         Debug.Log("Cursor Entering " + name + " GameObject");
     }
 
@@ -19,7 +19,7 @@ public class MainMenuButton : MonoBehaviour,IPointerDownHandler,IPointerEnterHan
     public void OnPointerExit(PointerEventData pointerEventData)
     {
         transform.localScale = new Vector3(1,1,1);
-        transform.localPosition -= new Vector3(40,0);
+        movingStar.SetActive(false);
         //Output the following message with the GameObject's name
         Debug.Log("Cursor Exiting " + name + " GameObject");
     }
