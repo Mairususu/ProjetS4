@@ -5,8 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b861bbf-2051-4e3f-8f27-9f76e288c1ed" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/MainMenuButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/MainMenuButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjetS4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProjetS4/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/MainMenuButton.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/MainMenuButton.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Tests/Bait.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Tests/Bait.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/MainMenuButton.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/MainMenuButton.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/SongManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/SongManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Visuel/Logo-removebg-preview.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Visuel/Logo-removebg-preview.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Visuel/c79d19db-31ee-4512-bff4-d6f46a403910.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Visuel/c79d19db-31ee-4512-bff4-d6f46a403910.png.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +112,9 @@
       <option name="presentableId" value="Default" />
       <updated>1771234722856</updated>
       <workItem from="1771234725526" duration="4399000" />
-      <workItem from="1771247403036" duration="2038000" />
+      <workItem from="1771247403036" duration="2602000" />
+      <workItem from="1771429647123" duration="574000" />
+      <workItem from="1771838653867" duration="2464000" />
     </task>
     <servers />
   </component>

@@ -1,13 +1,16 @@
-﻿using UnityEngine.UI;
+﻿using TMPro;
+using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine;
 
 public class SongManager : MonoBehaviour
 {
     [SerializeField] private Slider mainSlide;
+    [SerializeField] private TMP_Text volumeMainText;
     [SerializeField] private Slider musicSlide;
+    [SerializeField] private TMP_Text volumeMusicText;
     [SerializeField] private Slider sfxSlide;
-
+    [SerializeField]  private TMP_Text sfxVolumeText;
     [SerializeField] private AudioMixer audioMixer;
 
     private void Awake()
@@ -23,15 +26,18 @@ public class SongManager : MonoBehaviour
     public void OnMainVolumeChanged()
     {
         audioMixer.SetFloat("MasterVolume",Mathf.Log(mainSlide.value) * 20f );
+        volumeMainText.text = Mathf.Round(mainSlide.value*100) +" %";
     }
 
     public void OnMusicVolumeChanged()
     {
         audioMixer.SetFloat("MusicVolume",Mathf.Log( musicSlide.value) * 20f);
+        volumeMusicText.text = Mathf.Round( musicSlide.value * 100) +" %";
     }
 
     public void OnSFXVolumeChanged()
     {
         audioMixer.SetFloat("SFXVolume", Mathf.Log(sfxSlide.value) * 20f );
+        sfxVolumeText.text = Mathf.Round(sfxSlide.value * 100) +" %";
     }
 }
