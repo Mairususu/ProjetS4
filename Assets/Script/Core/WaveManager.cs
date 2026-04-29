@@ -1,14 +1,4 @@
-// ============================================================
-// WaveManager.cs
-// Orchestre les vagues : spawning, suivi des ennemis actifs
-// ============================================================
-// Setup Unity :
-//   • Attacher sur le GameObject "WaveManager"
-//   • Glisser les WaveData ScriptableObjects dans waves[]
-//   • Relier le spawner et le path dans l'Inspector
-// ============================================================
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace TowerDefense
@@ -27,7 +17,7 @@ namespace TowerDefense
         public int  EnemiesRemaining { get; private set; }
         public bool IsSpawning       { get; private set; }
 
-        private readonly HashSet<GameObject> activeEnemies = new();
+        private int totalSpawned;
 
         private void Awake()
         {
@@ -56,16 +46,18 @@ namespace TowerDefense
             CurrentWaveIndex++;
             WaveData wave = waves[CurrentWaveIndex];
 
+            // Calcul du total
             int total = 0;
             foreach (var entry in wave.entries) total += entry.count;
-            EnemiesRemaining = total;
 
-            GameEvents.RaiseWaveStarted(CurrentWaveIndex + 1);  
+            EnemiesRemaining = total;
+            totalSpawned     = 0;
+            GameEvents.RaiseWaveStarted(CurrentWaveIndex + 1);
             GameEvents.RaiseEnemyCountChanged(EnemiesRemaining);
 
             StartCoroutine(SpawnWave(wave));
         }
-        
+
         private IEnumerator SpawnWave(WaveData wave)
         {
             IsSpawning = true;
@@ -74,9 +66,8 @@ namespace TowerDefense
             {
                 for (int i = 0; i < entry.count; i++)
                 {
-                    // ← Plus de récupération de GameObject, Spawn est maintenant void
                     spawner.Spawn(entry.enemyData);
-
+                    totalSpawned++;
                     yield return new WaitForSeconds(entry.spawnInterval);
                 }
 
@@ -85,18 +76,26 @@ namespace TowerDefense
             }
 
             IsSpawning = false;
+            CheckWaveComplete();
         }
+
+        public void TrackEnemy(GameObject enemy) { }
 
         private void OnEnemyRemoved(EnemyData _)
         {
             EnemiesRemaining = Mathf.Max(0, EnemiesRemaining - 1);
             GameEvents.RaiseEnemyCountChanged(EnemiesRemaining);
-            activeEnemies.RemoveWhere(e => e == null);
-            if (!IsSpawning && activeEnemies.Count == 0)
-            {
-                GameEvents.RaiseWaveCompleted(CurrentWaveIndex + 1);
-                GameManager.Instance.OnWaveFinished();
-            }
+
+            CheckWaveComplete();
+        }
+
+        private void CheckWaveComplete()
+        {
+            if (IsSpawning) return;
+            if (EnemiesRemaining > 0) return;
+
+            GameEvents.RaiseWaveCompleted(CurrentWaveIndex + 1);
+            GameManager.Instance.OnWaveFinished();
         }
     }
 }

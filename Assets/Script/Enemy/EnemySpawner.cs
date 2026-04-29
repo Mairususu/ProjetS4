@@ -4,10 +4,11 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace TowerDefense
-{ public class EnemySpawner : MonoBehaviour
+{
+    public class EnemySpawner : MonoBehaviour
     {
-        [Tooltip("Parent pour garder la hiérarchie propre (optionnel)")]
         [SerializeField] private Transform enemyContainer;
+
         public void Spawn(EnemyData data)
         {
             StartCoroutine(SpawnAsync(data));
@@ -15,28 +16,39 @@ namespace TowerDefense
 
         private IEnumerator SpawnAsync(EnemyData data)
         {
+            Vector3 spawnPos = PathDefinition.Instance.StartPoint;
+
+            // InstantiateAsync gère lui-même le cache de l'asset
+            // et crée directement une instance — pas de double LoadAssetAsync
             AsyncOperationHandle<GameObject> handle =
-                data.prefabRef.LoadAssetAsync<GameObject>();
+                Addressables.InstantiateAsync(data.prefabRef, spawnPos, Quaternion.identity, enemyContainer);
 
             yield return handle;
 
             if (handle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"[EnemySpawner] Échec chargement prefab : {data.enemyName}");
+                Debug.LogError($"[EnemySpawner] Échec instanciation : {data.enemyName}");
                 yield break;
             }
 
-            Vector3    spawnPos = PathDefinition.Instance.StartPoint;
-            GameObject go       = Instantiate(handle.Result, spawnPos, Quaternion.identity, enemyContainer);
+            GameObject go = handle.Result;
 
             if (go.TryGetComponent<EnemyHealth>(out var health))   health.Initialize(data);
             if (go.TryGetComponent<PathFollower>(out var follower)) follower.Initialize(data.moveSpeed);
 
             go.tag = "Enemy";
+            WaveManager.Instance.TrackEnemy(go);
 
-            go.GetComponent<EnemyHealth>().OnDestroyed += () =>
-                Addressables.Release(handle);
+            bool released = false;
+
+            health.OnDestroyed += () =>
+            {
+                if (released) return;
+                released = true;
+
+                if (handle.IsValid())
+                    Addressables.ReleaseInstance(handle);
+            };
         }
     }
 }
-

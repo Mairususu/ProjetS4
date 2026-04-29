@@ -1,43 +1,69 @@
-// ============================================================
-// CameraController.cs
-// Caméra vue de dessus avec ZQSD + glissement aux bords
-// ============================================================
-// Setup Unity :
-//   • Attacher sur la Camera principale (ou son parent)
-//   • Définir arenaBounds (centre + taille de l'arène)
-//   • La caméra doit être orientée vers le bas (rotation X = 90)
-// ============================================================
+using Cinemachine;
 using UnityEngine;
 
 namespace TowerDefense
 {
     public class CameraController : MonoBehaviour
     {
-        [Header("Vitesse")]
-        [SerializeField] private float keyboardSpeed  = 10f;
-        [SerializeField] private float edgeScrollSpeed = 8f;
+        [Header("Cinemachine")]
+        [Tooltip("La CinemachineVirtualCamera de la scène")]
+        [SerializeField] private CinemachineVirtualCamera virtualCamera;
+
+        [Header("Déplacement")]
+        [SerializeField] private float keyboardSpeed   = 12f;
+        [SerializeField] private float edgeScrollSpeed = 10f;
 
         [Header("Défilement aux bords")]
-        [Tooltip("Épaisseur de la zone de bord en pixels")]
-        [SerializeField] private float edgeThickness = 20f;
+        [SerializeField] private float edgeThickness  = 20f;
         [SerializeField] private bool  enableEdgeScroll = true;
 
+        [Header("Zoom (molette)")]
+        [SerializeField] private bool  enableZoom    = true;
+        [SerializeField] private float zoomSpeed     = 4f;
+        [SerializeField] private float zoomMin       = 5f;    // hauteur min (FOV ou ortho size)
+        [SerializeField] private float zoomMax       = 20f;   // hauteur max
+        [SerializeField] private float zoomSmoothing = 6f;
+
         [Header("Limites de l'arène")]
-        [Tooltip("Centre de l'arène en world space")]
+        [Tooltip("Centre de l'arène en world space (X, Z)")]
         [SerializeField] private Vector2 arenaCenter = Vector2.zero;
-        [Tooltip("Taille de l'arène (largeur, hauteur) en world space")]
+        [Tooltip("Taille de l'arène en world units (largeur, hauteur)")]
         [SerializeField] private Vector2 arenaSize   = new Vector2(30f, 20f);
 
-        // ── Lifecycle ──────────────────────────────────────────
+        private float targetZoom;
+        private CinemachineTransposer   transposer;
+        private bool useOrtho;
+
+
+        private void Awake()
+        {
+            if (virtualCamera == null)
+            {
+                Debug.LogError("[CameraController] CinemachineVirtualCamera non assignée !");
+                return;
+            }
+
+            CinemachineBrain brain = Camera.main?.GetComponent<CinemachineBrain>();
+            useOrtho = Camera.main != null && Camera.main.orthographic;
+
+            transposer        = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+
+            targetZoom = useOrtho
+                ? virtualCamera.m_Lens.OrthographicSize
+                : (transposer != null ? -transposer.m_FollowOffset.y : zoomMax * 0.5f);
+        }
 
         private void Update()
         {
+            HandleMovement();
+            //if (enableZoom) HandleZoom();
+        }
+
+        private void HandleMovement()
+        {
             Vector3 move = Vector3.zero;
 
-            move += HandleKeyboard();
-
-            if (enableEdgeScroll)
-                move += HandleEdgeScroll();
+            move += GetKeyboardInput();
 
             if (move == Vector3.zero) return;
 
@@ -45,13 +71,10 @@ namespace TowerDefense
             transform.position = ClampToArena(newPos);
         }
 
-        // ── Input ──────────────────────────────────────────────
-
-        private Vector3 HandleKeyboard()
+        private Vector3 GetKeyboardInput()
         {
             Vector3 dir = Vector3.zero;
 
-            // ZQSD (disposition AZERTY) + WASD fallback
             if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
                 dir += Vector3.forward;
             if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
@@ -64,20 +87,28 @@ namespace TowerDefense
             return dir * keyboardSpeed;
         }
 
-        private Vector3 HandleEdgeScroll()
+
+        private void HandleZoom()
         {
-            Vector3 dir   = Vector3.zero;
-            Vector2 mouse = Input.mousePosition;
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            if (Mathf.Abs(scroll) < 0.001f) return;
 
-            if (mouse.x < edgeThickness)                         dir += Vector3.left;
-            if (mouse.x > Screen.width  - edgeThickness)        dir += Vector3.right;
-            if (mouse.y < edgeThickness)                         dir += Vector3.back;
-            if (mouse.y > Screen.height - edgeThickness)        dir += Vector3.forward;
+            targetZoom -= scroll * zoomSpeed;
+            targetZoom  = Mathf.Clamp(targetZoom, zoomMin, zoomMax);
 
-            return dir * edgeScrollSpeed;
+            if (useOrtho)
+            {
+                float current = virtualCamera.m_Lens.OrthographicSize;
+                virtualCamera.m_Lens.OrthographicSize =
+                    Mathf.Lerp(current, targetZoom, Time.deltaTime * zoomSmoothing);
+            }
+            else if (transposer != null)
+            {
+                Vector3 offset = transposer.m_FollowOffset;
+                offset.y = Mathf.Lerp(offset.y, -targetZoom, Time.deltaTime * zoomSmoothing);
+                transposer.m_FollowOffset = offset;
+            }
         }
-
-        // ── Contrainte aux bords de l'arène ───────────────────
 
         private Vector3 ClampToArena(Vector3 pos)
         {
@@ -90,14 +121,6 @@ namespace TowerDefense
             return pos;
         }
 
-        // ── Gizmos ─────────────────────────────────────────────
 
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireCube(
-                new Vector3(arenaCenter.x, 0f, arenaCenter.y),
-                new Vector3(arenaSize.x, 0.1f, arenaSize.y));
-        }
     }
 }

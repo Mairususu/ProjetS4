@@ -1119,6 +1119,9 @@ GameObject:
   - component: {fileID: 8144754115145732384}
   - component: {fileID: 5688981214667205134}
   - component: {fileID: 651506869422549457}
+  - component: {fileID: 2092536088027975763}
+  - component: {fileID: 3530526064160006288}
+  - component: {fileID: 7532396777906404635}
   m_Layer: 0
   m_Name: Skeleton_Rogue
   m_TagString: Enemy
@@ -1175,7 +1178,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e004617845b919f409b3b06ff3945b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointTolerance: 0.15
+  arrivalTolerance: 0.5
+  rotationSpeed: 10
+  modelRotationOffsetY: 180
+  modelRoot: {fileID: 8144754115145732384}
+--- !u!195 &2092536088027975763
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4214215296925649793}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &3530526064160006288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4214215296925649793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08b7c5371f5d7ab4eaab276025b4739b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 7532396777906404635}
+  paramIsWalking: IsWalking
+  paramIsDead: IsDead
+  paramSpeedMultiplier: SpeedMultiplier
+  deathAnimDuration: 2
+--- !u!95 &7532396777906404635
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4214215296925649793}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bb1171663ea2f2a45969e0c56d0a952e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4259663663325284123
 GameObject:
   m_ObjectHideFlags: 0

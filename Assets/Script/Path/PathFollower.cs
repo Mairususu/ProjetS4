@@ -1,79 +1,124 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace TowerDefense
 {
+    [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(EnemyAnimator))]
     public class PathFollower : MonoBehaviour
     {
-        // Liste statique permettant aux tours de trouver les ennemis actifs
-        public static readonly HashSet<PathFollower> ActiveFollowers = new();
+        public static readonly System.Collections.Generic.HashSet<PathFollower> ActiveFollowers = new();
 
-        [Tooltip("Distance en dessous de laquelle on passe au waypoint suivant")]
-        [SerializeField] private float waypointTolerance = 0.15f;
+        [Tooltip("Distance en dessous de laquelle on considère l'ennemi arrivé au point B")]
+        [SerializeField] private float arrivalTolerance = 0.5f;
 
-        private int   currentWaypointIndex;
-        private float moveSpeed;
-        public float Progress { get; private set; }
+        [Tooltip("Vitesse de rotation visuelle vers la direction de déplacement")]
+        [SerializeField] private float rotationSpeed = 10f;
 
+        [Header("Fix rotation")]
+        [Tooltip("Offset Y appliqué au modèle si le mesh est orienté à l'envers. 180 si l'ennemi recule.")]
+        [SerializeField] private float modelRotationOffsetY = 180f;
 
-        private void OnEnable()
+        [Tooltip("Transform du modèle visuel enfant. Si null, utilise ce GameObject.")]
+        [SerializeField] private Transform modelRoot;
+
+        public float Progress  { get; private set; }
+        public bool  IsArrived { get; private set; }
+        private NavMeshAgent  agent;
+        private EnemyAnimator anim;
+        private float         totalDistance;
+        private bool          initialized;
+
+        private void Awake()
         {
-            ActiveFollowers.Add(this);
-            currentWaypointIndex = 0;
+            agent = GetComponent<NavMeshAgent>();
+            anim  = GetComponent<EnemyAnimator>();
+
+            agent.updateRotation = false;
+            agent.updateUpAxis   = false;
+            if (modelRoot != null)
+                modelRoot.localRotation = Quaternion.Euler(0f, modelRotationOffsetY, 0f);
         }
 
+        private void OnEnable()  => ActiveFollowers.Add(this);
         private void OnDisable() => ActiveFollowers.Remove(this);
-
         private void OnDestroy() => ActiveFollowers.Remove(this);
 
         public void Initialize(float speed)
         {
-            moveSpeed = speed;
-            transform.position = PathDefinition.Instance.StartPoint;
-            currentWaypointIndex = 0;
+            if (PathDefinition.Instance == null)
+            {
+                Debug.LogError("[PathFollower] PathDefinition introuvable !");
+                return;
+            }
+
+            IsArrived   = false;
+            initialized = false;
+            agent.speed            = speed;
+            agent.stoppingDistance = arrivalTolerance;
+
+            bool warped = agent.Warp(PathDefinition.Instance.StartPoint);
+            if (!warped)
+            {
+                Debug.LogWarning($"[PathFollower] {gameObject.name} hors NavMesh.");
+                return;
+            }
+
+            agent.SetDestination(PathDefinition.Instance.EndPoint);
+            totalDistance = Vector3.Distance(
+                PathDefinition.Instance.StartPoint,
+                PathDefinition.Instance.EndPoint);
+
+            initialized = true;
+            anim?.SetWalking(true);
         }
 
         private void Update()
         {
-            if (PathDefinition.Instance == null) return;
-
-            MoveAlongPath();
+            if (!initialized || IsArrived) return;
             UpdateProgress();
+            UpdateRotation();
+            CheckArrival();
         }
 
-        private void MoveAlongPath()
+        private void UpdateRotation()
         {
-            if (currentWaypointIndex >= PathDefinition.Instance.WaypointCount) return;
+            if (agent.velocity.sqrMagnitude < 0.01f) return;
 
-            Vector3 target = PathDefinition.Instance.GetWaypoint(currentWaypointIndex);
-            Vector3 dir    = (target - transform.position).normalized;
-
-            transform.position += dir * (moveSpeed * Time.deltaTime);
-            if (dir != Vector3.zero)
-                transform.forward = new Vector3(dir.x, 0f, dir.z);
-
-            if (Vector3.Distance(transform.position, target) <= waypointTolerance)
-            {
-                currentWaypointIndex++;
-
-                // Arrivée au point B
-                if (currentWaypointIndex >= PathDefinition.Instance.WaypointCount)
-                    OnReachedEnd();
-            }
+            Vector3    moveDir   = new Vector3(agent.velocity.x, 0f, agent.velocity.z).normalized;
+            Quaternion targetRot = Quaternion.LookRotation(moveDir);
+            transform.rotation   = Quaternion.Lerp(
+                transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
         }
+
 
         private void UpdateProgress()
         {
-            int total = PathDefinition.Instance.WaypointCount;
-            if (total <= 1) { Progress = 1f; return; }
-            Progress = (float)currentWaypointIndex / (total - 1);
+            if (agent.pathPending || totalDistance <= 0f) return;
+            Progress = Mathf.Clamp01(1f - (agent.remainingDistance / totalDistance));
+        }
+
+        private void CheckArrival()
+        {
+            if (agent.pathPending) return;
+            if (agent.remainingDistance > arrivalTolerance) return;
+            if (agent.velocity.sqrMagnitude > 0.04f) return;
+
+            OnReachedEnd();
         }
 
         private void OnReachedEnd()
         {
+            IsArrived       = true;
+            agent.isStopped = true;
+            anim?.SetWalking(false);
+
             EnemyData data = GetComponent<EnemyHealth>()?.Data;
             if (data != null) GameEvents.RaiseEnemyReachedEnd(data);
+
             Destroy(gameObject);
         }
+
+      
     }
 }

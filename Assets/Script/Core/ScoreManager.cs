@@ -7,18 +7,15 @@ namespace TowerDefense
         public static ScoreManager Instance { get; private set; }
 
         [Header("Multiplicateur")]
-        [Tooltip("Valeur maximale absolue du multiplicateur")]
-        [SerializeField] private int maxMultiplier = 5;
-        [Tooltip("Éliminations consécutives nécessaires pour +1 multiplicateur")]
-        [SerializeField] private int killStreakThreshold = 5;
-        [Tooltip("Fuites consécutives nécessaires pour -1 multiplicateur")]
-        [SerializeField] private int leakStreakThreshold = 3;
+        [SerializeField] private int maxMultiplier        = 5;
+        [SerializeField] private int killStreakThreshold  = 5;
+        [SerializeField] private int leakStreakThreshold  = 3;
 
-        public int Score       { get; private set; }
-        public int Multiplier  { get; private set; } = 1;
+        public int Score      { get; private set; }
+        public int Multiplier { get; private set; } = 1;
 
-        private int killStreak; // nb éliminations depuis dernier reset/palier
-        private int leakStreak; // nb fuites depuis dernier reset/palier
+        private int killStreak;
+        private int leakStreak;
 
         private void Awake()
         {
@@ -28,20 +25,20 @@ namespace TowerDefense
 
         private void OnEnable()
         {
-            GameEvents.OnEnemyKilled      += HandleEnemyKilled;
-            GameEvents.OnEnemyReachedEnd  += HandleEnemyReachedEnd;
+            GameEvents.OnEnemyKilled     += HandleEnemyKilled;
+            GameEvents.OnEnemyReachedEnd += HandleEnemyReachedEnd;
         }
 
         private void OnDisable()
         {
-            GameEvents.OnEnemyKilled      -= HandleEnemyKilled;
-            GameEvents.OnEnemyReachedEnd  -= HandleEnemyReachedEnd;
+            GameEvents.OnEnemyKilled     -= HandleEnemyKilled;
+            GameEvents.OnEnemyReachedEnd -= HandleEnemyReachedEnd;
         }
 
         private void HandleEnemyKilled(EnemyData data)
         {
-            AddScore(data.scoreValue);
-
+            Score += data.scoreValue * Mathf.Abs(Multiplier);
+            GameEvents.RaiseScoreChanged(Score);
             EconomyManager.Instance.Earn(data.reward);
 
             if (Multiplier < 0)
@@ -50,10 +47,9 @@ namespace TowerDefense
                 killStreak = 0;
                 GameEvents.RaiseMultiplierChanged(Multiplier);
             }
-
             leakStreak = 0;
-
             killStreak++;
+
             if (killStreak >= killStreakThreshold)
             {
                 killStreak = 0;
@@ -63,8 +59,8 @@ namespace TowerDefense
 
         private void HandleEnemyReachedEnd(EnemyData data)
         {
-            AddScore(-data.scoreValue);
-
+            Score -= data.scoreValue * Mathf.Abs(Multiplier);
+            GameEvents.RaiseScoreChanged(Score);
             if (Multiplier > 0)
             {
                 Multiplier = -1;
@@ -73,7 +69,6 @@ namespace TowerDefense
             }
 
             killStreak = 0;
-
             leakStreak++;
             if (leakStreak >= leakStreakThreshold)
             {
@@ -81,13 +76,6 @@ namespace TowerDefense
                 ChangeMultiplier(-1);
             }
         }
-
-        private void AddScore(int baseValue)
-        {
-            Score += baseValue * Multiplier;
-            GameEvents.RaiseScoreChanged(Score);
-        }
-
         private void ChangeMultiplier(int delta)
         {
             Multiplier = Mathf.Clamp(Multiplier + delta, -maxMultiplier, maxMultiplier);
