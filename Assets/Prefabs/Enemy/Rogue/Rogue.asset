@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Rogue
   m_EditorClassIdentifier: 
   enemyName: Rogue
-  prefab: {fileID: 4214215296925649793, guid: ed36599419214194ab90a52efd045ebd, type: 3}
+  prefabRef:
+    m_AssetGUID: ed36599419214194ab90a52efd045ebd
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   maxHealth: 80
   moveSpeed: 10
   scoreValue: 80

@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Warrior
   m_EditorClassIdentifier: 
   enemyName: Warrior
-  prefab: {fileID: 8098568128644209254, guid: ecfb32798ea760d408bf26c27de1a545, type: 3}
+  prefabRef:
+    m_AssetGUID: ecfb32798ea760d408bf26c27de1a545
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   maxHealth: 120
   moveSpeed: 5
   scoreValue: 100

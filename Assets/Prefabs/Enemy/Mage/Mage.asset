@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Mage
   m_EditorClassIdentifier: 
   enemyName: Mage
-  prefab: {fileID: 4723507157754560249, guid: b287cc2d685000341a951f3bcfeb1b78, type: 3}
+  prefabRef:
+    m_AssetGUID: b287cc2d685000341a951f3bcfeb1b78
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   maxHealth: 120
   moveSpeed: 4
   scoreValue: 100

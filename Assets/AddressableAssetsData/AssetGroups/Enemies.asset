@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Enemies
+  m_EditorClassIdentifier: 
+  m_GroupName: Enemies
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 720f41a7227f0cb439273fd7d7f30483
+  m_SerializeEntries:
+  - m_GUID: b287cc2d685000341a951f3bcfeb1b78
+    m_Address: Assets/Prefabs/Enemy/Mage/Skeleton_Mage.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ecfb32798ea760d408bf26c27de1a545
+    m_Address: Assets/Prefabs/Enemy/Warrior/Skeleton_Warrior.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed36599419214194ab90a52efd045ebd
+    m_Address: Assets/Prefabs/Enemy/Rogue/Skeleton_Rogue.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f991d5e773bf76647b9d2160be29d2ac
+    m_Address: Assets/Prefabs/Enemy/Minions/Skeleton_Minion.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d5d5738e2127ff943a737fb0563395c2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 36e8ecbd3f1992f40a584839ff53c7ba, type: 2}
+    - {fileID: 11400000, guid: 758128982846bcc4d889d55e1779c6cc, type: 2}

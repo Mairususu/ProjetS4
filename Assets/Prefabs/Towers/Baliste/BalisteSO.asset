@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerName: Baliste
   icon: {fileID: 21300000, guid: 179b0e5147171e74dbc51fb362050d41, type: 3}
-  prefab: {fileID: 5816349831632108514, guid: 711852a39716ae34bb796eebf98d67c5, type: 3}
+  prefabRef:
+    m_AssetGUID: 711852a39716ae34bb796eebf98d67c5
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 1
   purchaseCost: 100
   levels:
   - upgradeCost: 0

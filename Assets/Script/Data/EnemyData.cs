@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace TowerDefense
 {
@@ -7,7 +8,7 @@ namespace TowerDefense
     {
         [Header("Identité")]
         public string enemyName = "Créature";
-        public GameObject prefab;
+        public AssetReferenceGameObject prefabRef;
 
         [Header("Propriétés")]
         [Tooltip("Points de vie de la créature")]

@@ -1,26 +1,41 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
 namespace TowerDefense
 { public class EnemySpawner : MonoBehaviour
     {
         [Tooltip("Parent pour garder la hiérarchie propre (optionnel)")]
         [SerializeField] private Transform enemyContainer;
-        public GameObject Spawn(EnemyData data)
+        public void Spawn(EnemyData data)
         {
-            if (data?.prefab == null)
+            StartCoroutine(SpawnAsync(data));
+        }
+
+        private IEnumerator SpawnAsync(EnemyData data)
+        {
+            AsyncOperationHandle<GameObject> handle =
+                data.prefabRef.LoadAssetAsync<GameObject>();
+
+            yield return handle;
+
+            if (handle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogWarning($"[EnemySpawner] Prefab manquant pour {data?.name}");
-                return null;
+                Debug.LogError($"[EnemySpawner] Échec chargement prefab : {data.enemyName}");
+                yield break;
             }
 
             Vector3    spawnPos = PathDefinition.Instance.StartPoint;
-            GameObject go       = Instantiate(data.prefab, spawnPos, Quaternion.identity, enemyContainer);
+            GameObject go       = Instantiate(handle.Result, spawnPos, Quaternion.identity, enemyContainer);
 
-            if (go.TryGetComponent<EnemyHealth>(out var health)) health.Initialize(data);
+            if (go.TryGetComponent<EnemyHealth>(out var health))   health.Initialize(data);
             if (go.TryGetComponent<PathFollower>(out var follower)) follower.Initialize(data.moveSpeed);
 
             go.tag = "Enemy";
 
-            return go;
+            go.GetComponent<EnemyHealth>().OnDestroyed += () =>
+                Addressables.Release(handle);
         }
     }
 }

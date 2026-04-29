@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 namespace TowerDefense
 {
     public class EnemyHealth : MonoBehaviour
     {
         public EnemyData Data { get; private set; }
+        public event Action OnDestroyed; 
 
         private float currentHealth;
 
@@ -22,6 +24,8 @@ namespace TowerDefense
         private void Die()
         {
             GameEvents.RaiseEnemyKilled(Data);
+            
+            OnDestroyed?.Invoke(); 
             Destroy(gameObject);
         }
 

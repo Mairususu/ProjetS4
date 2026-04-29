@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Minions
   m_EditorClassIdentifier: 
   enemyName: Minions
-  prefab: {fileID: 8470665221093206253, guid: f991d5e773bf76647b9d2160be29d2ac, type: 3}
+  prefabRef:
+    m_AssetGUID: f991d5e773bf76647b9d2160be29d2ac
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 1
   maxHealth: 50
   moveSpeed: 4
   scoreValue: 10

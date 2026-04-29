@@ -7,7 +7,11 @@
 //   • Attacher ce script + un Collider (trigger ou non selon usage)
 //   • Assigner le layer "PlacementArea"
 // ============================================================
+
+using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace TowerDefense
 {
@@ -23,22 +27,43 @@ namespace TowerDefense
 
         public void PlaceTower(TowerData data)
         {
-            if (!IsAvailable || data?.prefab == null) return;
+            if (!IsAvailable) return;
+            StartCoroutine(PlaceTowerAsync(data));
+        }
 
-            GameObject go = Instantiate(data.prefab, transform.position, transform.rotation);
-            PlacedTower  = go.GetComponent<TowerBase>();
-
-            if (PlacedTower != null) PlacedTower.data = data;
-
+        private IEnumerator PlaceTowerAsync(TowerData data)
+        {
             IsAvailable = false;
             RefreshVisual();
+
+            AsyncOperationHandle<GameObject> handle =
+                data.prefabRef.LoadAssetAsync<GameObject>();
+
+            yield return handle;
+
+            if (handle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogError($"[TowerSlot] Échec chargement prefab tour : {data.towerName}");
+                IsAvailable = true;
+                RefreshVisual();
+                EconomyManager.Instance.Earn(data.purchaseCost); // rembourse
+                yield break;
+            }
+
+            GameObject go = Instantiate(handle.Result, transform.position, transform.rotation);
+            PlacedTower   = go.GetComponent<TowerBase>();
+            if (PlacedTower != null) PlacedTower.data = data;
+
             GameEvents.RaiseTowerPlaced(PlacedTower);
         }
 
         public void ClearTower()
         {
-            if (PlacedTower != null) Destroy(PlacedTower.gameObject);
-            PlacedTower = null;
+            if (PlacedTower != null)
+            {
+                Addressables.ReleaseInstance(PlacedTower.gameObject);
+                PlacedTower = null;
+            }
             IsAvailable = true;
             RefreshVisual();
         }

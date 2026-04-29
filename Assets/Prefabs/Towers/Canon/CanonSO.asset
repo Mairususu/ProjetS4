@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerName: Canon
   icon: {fileID: 21300000, guid: d098adb4e8ac9f04f9511532a3c6762f, type: 3}
-  prefab: {fileID: 1800172639365659999, guid: c6fa828c077d09044a3c9002e8d4387e, type: 3}
+  prefabRef:
+    m_AssetGUID: c6fa828c077d09044a3c9002e8d4387e
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   purchaseCost: 100
   levels:
   - upgradeCost: 0

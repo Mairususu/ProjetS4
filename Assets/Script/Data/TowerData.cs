@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace TowerDefense
 {
@@ -30,7 +31,7 @@ namespace TowerDefense
         [Header("Identité")]
         public string towerName   = "Tour";
         public Sprite icon;
-        public GameObject prefab;
+        public AssetReferenceGameObject prefabRef;
 
         [Header("Coût d'achat initial")]
         public int purchaseCost = 100;

@@ -69,22 +69,23 @@ namespace TowerDefense
         private IEnumerator SpawnWave(WaveData wave)
         {
             IsSpawning = true;
+
             foreach (WaveEntry entry in wave.entries)
             {
                 for (int i = 0; i < entry.count; i++)
                 {
-                    GameObject enemy = spawner.Spawn(entry.enemyData);
-                    if (enemy != null) activeEnemies.Add(enemy);
+                    // ← Plus de récupération de GameObject, Spawn est maintenant void
+                    spawner.Spawn(entry.enemyData);
+
                     yield return new WaitForSeconds(entry.spawnInterval);
                 }
 
                 if (entry.delayAfterGroup > 0f)
                     yield return new WaitForSeconds(entry.delayAfterGroup);
             }
+
             IsSpawning = false;
         }
-        
-        public void RegisterEnemy(GameObject enemy) => activeEnemies.Add(enemy);
 
         private void OnEnemyRemoved(EnemyData _)
         {
