@@ -23,9 +23,6 @@ namespace TowerDefense
             if (wavePreviewText != null)
                 wavePreviewText.text = $"Lancer la vague {next}";
 
-            // Désactiver si plus de vagues
-            if (launchButton != null)
-                launchButton.interactable = WaveManager.Instance?.HasMoreWaves() ?? false;
         }
     }
 }

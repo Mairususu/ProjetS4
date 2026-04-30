@@ -1,13 +1,3 @@
-// ============================================================
-// TowerSlot.cs
-// Zone de placement d'une tour sur l'arène
-// ============================================================
-// Setup Unity :
-//   • Créer des GameObjects "TowerSlot" le long du chemin
-//   • Attacher ce script + un Collider (trigger ou non selon usage)
-//   • Assigner le layer "PlacementArea"
-// ============================================================
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -18,8 +8,8 @@ namespace TowerDefense
     public class TowerSlot : MonoBehaviour
     {
         [Header("Visuel")]
-        [SerializeField] private GameObject availableVisual;   // indicateur vert
-        [SerializeField] private GameObject occupiedVisual;    // indicateur gris
+        [SerializeField] private GameObject availableVisual;
+        [SerializeField] private GameObject occupiedVisual;    
         public bool      IsAvailable   { get; private set; } = true;
         public TowerBase PlacedTower   { get; private set; }
         
@@ -35,26 +25,27 @@ namespace TowerDefense
         {
             IsAvailable = false;
             RefreshVisual();
-
-            AsyncOperationHandle<GameObject> handle =
-                data.prefabRef.LoadAssetAsync<GameObject>();
-
-            yield return handle;
-
-            if (handle.Status != AsyncOperationStatus.Succeeded)
+            if (data.prefabRef != null && data.prefabRef.RuntimeKeyIsValid())
             {
-                Debug.LogError($"[TowerSlot] Échec chargement prefab tour : {data.towerName}");
-                IsAvailable = true;
-                RefreshVisual();
-                EconomyManager.Instance.Earn(data.purchaseCost); // rembourse
-                yield break;
+                var handle = data.prefabRef.InstantiateAsync(transform.position, transform.rotation);
+                yield return handle;
+                if (handle.Status != AsyncOperationStatus.Succeeded)
+                {
+                    IsAvailable = true;
+                    RefreshVisual();
+                    EconomyManager.Instance.Earn(data.purchaseCost);
+                    yield break;
+                }
+
+                GameObject go = Instantiate(handle.Result, transform.position, transform.rotation);
+                PlacedTower   = go.GetComponent<TowerBase>();
+                if (PlacedTower != null) PlacedTower.data = data;
+                GameEvents.RaiseTowerPlaced(PlacedTower);
             }
-
-            GameObject go = Instantiate(handle.Result, transform.position, transform.rotation);
-            PlacedTower   = go.GetComponent<TowerBase>();
-            if (PlacedTower != null) PlacedTower.data = data;
-
-            GameEvents.RaiseTowerPlaced(PlacedTower);
+            else 
+            {
+                Debug.LogWarning("Le prefabRef est invalide. Construction ignorée pour le test.");
+            }
         }
 
         public void ClearTower()

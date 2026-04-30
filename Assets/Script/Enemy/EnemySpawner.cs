@@ -17,9 +17,6 @@ namespace TowerDefense
         private IEnumerator SpawnAsync(EnemyData data)
         {
             Vector3 spawnPos = PathDefinition.Instance.StartPoint;
-
-            // InstantiateAsync gère lui-même le cache de l'asset
-            // et crée directement une instance — pas de double LoadAssetAsync
             AsyncOperationHandle<GameObject> handle =
                 Addressables.InstantiateAsync(data.prefabRef, spawnPos, Quaternion.identity, enemyContainer);
 

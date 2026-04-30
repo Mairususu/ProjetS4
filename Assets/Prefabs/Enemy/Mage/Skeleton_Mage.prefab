@@ -1025,6 +1025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 482ae39572ea81741b00be2ce4c35d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBar: {fileID: 9042142580078509482}
 --- !u!114 &1202947430462261509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1504,7 +1505,7 @@ MonoBehaviour:
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 1
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0

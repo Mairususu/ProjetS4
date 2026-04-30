@@ -129,10 +129,13 @@ namespace TowerDefense
             agent.isStopped = true;
             anim?.SetWalking(false);
 
+            Collider col = GetComponentInChildren<Collider>();
+            if (col != null) col.enabled = false;
+
             EnemyData data = GetComponent<EnemyHealth>()?.Data;
             if (data != null) GameEvents.RaiseEnemyReachedEnd(data);
 
-            Destroy(gameObject);
+            Destroy(gameObject, 0.5f);
         }
 
         private void OnDrawGizmos()

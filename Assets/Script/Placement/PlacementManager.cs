@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-
 namespace TowerDefense
 {
     public class PlacementManager : MonoBehaviour
@@ -13,8 +11,7 @@ namespace TowerDefense
 
         [Header("Preview")]
         [SerializeField] private GameObject previewPrefab;
-        [SerializeField] private LayerMask  placementMask; // layer des TowerSlot
-
+        [SerializeField] private LayerMask  placementMask; 
         public TowerData SelectedTowerData;
         public bool IsPlacementPhase;
         public TowerData[] ShopData        => shopData;
@@ -30,12 +27,15 @@ namespace TowerDefense
 
         private void Update()
         {
-            if (!IsPlacementPhase || SelectedTowerData == null) return;
+            if (!IsPlacementPhase) return;
 
-            UpdatePreview();
+            if (SelectedTowerData != null) UpdatePreview();
 
             if (Input.GetMouseButtonDown(0) && !IsPointerOverUIElement())
+            {
+                if (SelectedTowerData == null) return;
                 TryPlaceAtCursor();
+            }
         }
 
         private bool IsPointerOverUIElement()
@@ -51,7 +51,6 @@ namespace TowerDefense
 
             foreach (var r in results)
             {
-                // On ignore tout ce qui n'est pas dans un Canvas
                 if (r.gameObject.GetComponentInParent<Canvas>() != null)
                     return true;
             }

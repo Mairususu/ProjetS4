@@ -26,18 +26,18 @@ public class SongManager : MonoBehaviour
     public void OnMainVolumeChanged()
     {
         audioMixer.SetFloat("MasterVolume",Mathf.Log(mainSlide.value) * 20f );
-        volumeMainText.text = Mathf.Round(mainSlide.value*100) +" %";
+        if(volumeMainText!=null) volumeMainText.text = Mathf.Round(mainSlide.value*100) +" %";
     }
 
     public void OnMusicVolumeChanged()
     {
         audioMixer.SetFloat("MusicVolume",Mathf.Log( musicSlide.value) * 20f);
-        volumeMusicText.text = Mathf.Round( musicSlide.value * 100) +" %";
+        if(volumeMusicText!=null) volumeMusicText.text = Mathf.Round( musicSlide.value * 100) +" %";
     }
 
     public void OnSFXVolumeChanged()
     {
         audioMixer.SetFloat("SFXVolume", Mathf.Log(sfxSlide.value) * 20f );
-        sfxVolumeText.text = Mathf.Round(sfxSlide.value * 100) +" %";
+        if(sfxVolumeText!= null)sfxVolumeText.text = Mathf.Round(sfxSlide.value * 100) +" %";
     }
 }

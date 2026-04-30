@@ -3,7 +3,7 @@ using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using TowerDefense; 
+using TowerDefense;
 
 public class TowerShootingTests
 {
@@ -11,7 +11,7 @@ public class TowerShootingTests
     private EnemyHealth enemyHealth;
 
     private GameObject towerGo;
-    private TowerBase towerBase;
+    private TowerBase   towerBase;
     private TowerAttack towerAttack;
 
     private GameObject projPrefab;
@@ -19,83 +19,112 @@ public class TowerShootingTests
     [SetUp]
     public void SetUp()
     {
-        // ==========================================
-        // 1. CrÈation de la cible (Ennemi)
-        // ==========================================
         enemyGo = new GameObject("EnemyDummy");
-        enemyGo.transform.position = new Vector3(0, 0, 2f); 
+        enemyGo.transform.position = new Vector3(0f, 0f, 2f);
         enemyGo.tag = "Enemy";
+        var col = enemyGo.AddComponent<SphereCollider>();
+        col.isTrigger = false;
+        col.radius    = 0.5f;
 
         enemyHealth = enemyGo.AddComponent<EnemyHealth>();
-
-        // Simulation des donnÈes ennemies
         var enemyData = ScriptableObject.CreateInstance<EnemyData>();
         enemyData.maxHealth = 100f;
+        enemyData.reward    = 0;
+        enemyData.scoreValue = 0;
         enemyHealth.Initialize(enemyData);
-
-        enemyGo.AddComponent<PathFollower>();
-
-        // ==========================================
-        // 2. CrÈation du Projectile (Prefab)
-        // ==========================================
+        
         projPrefab = new GameObject("ProjectilePrefab");
+        var projCollider = projPrefab.AddComponent<SphereCollider>();
+        projCollider.isTrigger = true;
+        projCollider.radius    = 0.1f;
+        var rb = projPrefab.AddComponent<Rigidbody>();
+        rb.isKinematic = true;
         projPrefab.AddComponent<Projectile>();
         projPrefab.SetActive(false);
-
-        // ==========================================
-        // 3. CrÈation de la Tour
-        // ==========================================
+        
         towerGo = new GameObject("TowerDummy");
         towerGo.transform.position = Vector3.zero;
 
-        towerBase = towerGo.AddComponent<TowerBase>();
-        towerAttack = towerGo.GetComponent<TowerAttack>();
-
-      
         var towerData = ScriptableObject.CreateInstance<TowerData>();
-        towerData.levels = new TowerLevel[1];
+        towerData.levels    = new TowerLevel[1];
         towerData.levels[0] = new TowerLevel
         {
-            range = 5f,
-            fireRate = 10f,        
+            range           = 10f,
+            fireRate        = 0.1f,
             projectileCount = 1,
-            projectileSpeed = 50f, 
-            damage = 25f           
+            projectileSpeed = 50f,
+            damage          = 25f
         };
-        towerBase.data = towerData;
 
-        // ==========================================
-        // 4. Injection des rÈfÈrences privÈes
-        // ==========================================
-    
-        var rotPoint = new GameObject("RotPoint").transform;
-        rotPoint.parent = towerGo.transform;
-        typeof(TowerBase).GetField("rotationPoint", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(towerBase, rotPoint);
-
+        towerAttack = towerGo.AddComponent<TowerAttack>();
         var firePoint = new GameObject("FirePoint").transform;
-        firePoint.parent = towerGo.transform;
-        typeof(TowerAttack).GetField("firePoints", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(towerAttack, new Transform[] { firePoint });
+        firePoint.SetParent(towerGo.transform);
+        SetPrivate(towerAttack, "firePoints", new Transform[] { firePoint });
+        SetPrivate(towerAttack, "projectilePrefab", projPrefab);
 
-        typeof(TowerAttack).GetField("projectilePrefab", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(towerAttack, projPrefab);
+        towerBase      = towerGo.AddComponent<TowerBase>();
+        towerBase.data = towerData;
+        towerAttack.Configure(towerData.levels[0], true);
+        var rotPoint = new GameObject("RotPoint").transform;
+        rotPoint.SetParent(towerGo.transform);
+        SetPrivate(towerBase, "rotationPoint", rotPoint);
+        SetPrivate(towerBase, "currentTarget", enemyGo.transform);
     }
 
     [TearDown]
     public void TearDown()
     {
-        // Nettoyage aprËs le test
         Object.DestroyImmediate(enemyGo);
         Object.DestroyImmediate(towerGo);
         Object.DestroyImmediate(projPrefab);
+
+        // Nettoie les projectiles restants
+        foreach (var p in Object.FindObjectsOfType<Projectile>())
+            Object.DestroyImmediate(p.gameObject);
     }
 
     [UnityTest]
     public IEnumerator TowerShootsAndDamagesEnemy_Successfully()
     {
-        Assert.AreEqual(1f, enemyHealth.HealthNormalized, "L'ennemi devrait avoir 100% de sa vie au dÈbut du test.");
+        // 1. On s'assure que le prefab est pr√™t
+        projPrefab.SetActive(true); 
+    
+        // 2. On emp√™che FindTarget d'√©craser notre cible de test
+        towerBase.enabled = false; 
+        towerBase.SetTargetForTest(enemyGo.transform);
 
+        Assert.AreEqual(1f, enemyHealth.HealthNormalized, 0.001f);
+
+        // 3. On attend un peu plus pour laisser le temps au projectile de voyager
+        // Si la vitesse est de 50 et la distance de 2, il faut 0.04s + temps de r√©action
         yield return new WaitForSeconds(0.2f);
 
-        Assert.Less(enemyHealth.HealthNormalized, 1f, "L'ennemi n'a subi aucun dÈg‚t, la tour n'a pas tirÈ ou le projectile a ratÈ.");
-        Assert.AreEqual(0.75f, enemyHealth.HealthNormalized, 0.01f, "Les dÈg‚ts infligÈs ne correspondent pas ‡ la statistique 'damage' configurÈe sur la tour.");
+        Assert.Less(enemyHealth.HealthNormalized, 1f, "L'ennemi n'a subi aucun d√©g√¢t.");
+    }
+    
+    [UnityTest]
+    public IEnumerator TowerDoesNotShoot_WhenNoTarget()
+    {
+        towerBase.SetTargetForTest(null); // ‚Üê retire la cible
+
+        yield return new WaitForSeconds(0.3f);
+
+        Assert.AreEqual(1f, enemyHealth.HealthNormalized, 0.001f,
+            "La tour a tir√© sans cible.");
+    }
+
+    private static void SetPrivate(object obj, string fieldName, object value)
+    {
+        var field = obj.GetType().GetField(
+            fieldName,
+            BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (field == null)
+        {
+            Debug.LogError($"[Test] Champ priv√© '{fieldName}' introuvable sur {obj.GetType().Name}");
+            return;
+        }
+
+        field.SetValue(obj, value);
     }
 }

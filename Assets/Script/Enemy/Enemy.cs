@@ -10,6 +10,7 @@ namespace TowerDefense
         public event Action OnDestroyed; 
         private bool          isDead;       
         private EnemyAnimator enemyAnimator;
+        [SerializeField] private EnemyHealthBar  healthBar;
         private NavMeshAgent  agent;    
         private float currentHealth;
 
@@ -17,24 +18,41 @@ namespace TowerDefense
         {
             Data          = data;
             currentHealth = data.maxHealth;
+            IsDead        = false;  
+        }
+
+        // Dans EnemyHealth.cs
+
+        private void Awake()
+        {
+            if (healthBar == null)
+                healthBar = GetComponentInChildren<EnemyHealthBar>();
+            enemyAnimator = GetComponent<EnemyAnimator>();
+            agent = GetComponent<NavMeshAgent>();
         }
 
         public void TakeDamage(float amount)
         {
+            if (isDead || Data == null) return;
             currentHealth -= amount;
+            if (healthBar != null)
+            {
+                healthBar.TakeDamage(currentHealth, Data.maxHealth);
+            }
+
             if (currentHealth <= 0f) Die();
         }
-
+        public bool IsDead { get; private set; }
         private void Die()
         {
-            if (isDead) return;
-            isDead = true;
-
+            Debug.Log($"[EnemyHealth] Die() appelé, IsDead avant = {IsDead}");
+            if (IsDead) return;
+            IsDead = true;
+            Debug.Log($"[EnemyHealth] IsDead mis à true");
             if (agent != null) agent.isStopped = true;
 
             GameEvents.RaiseEnemyKilled(Data);
             OnDestroyed?.Invoke(); 
-
             if (enemyAnimator != null)
                 enemyAnimator.PlayDeath(() => OnDestroyed?.Invoke());
             else

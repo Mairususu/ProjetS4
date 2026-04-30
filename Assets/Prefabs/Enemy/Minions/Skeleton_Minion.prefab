@@ -1974,6 +1974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 482ae39572ea81741b00be2ce4c35d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBar: {fileID: 3607571426702797202}
 --- !u!195 &7014638165629460918
 NavMeshAgent:
   m_ObjectHideFlags: 0

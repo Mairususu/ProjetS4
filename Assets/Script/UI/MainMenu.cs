@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject MainPanel;
-    [SerializeField]  private GameObject CreditsPanel;
     [SerializeField]  private GameObject SongPanel;
 
     void Start()
@@ -16,19 +15,12 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Scenes/GameScene");
     }
 
     public void ShowMainMenu()
     {
         MainPanel.SetActive(true);
-        CreditsPanel.SetActive(false);
-        SongPanel.SetActive(false);
-    }
-    public void ShowCredits()
-    {
-        MainPanel.SetActive(false);
-        CreditsPanel.SetActive(true);
         SongPanel.SetActive(false);
     }
 
@@ -36,7 +28,6 @@ public class MainMenu : MonoBehaviour
     {
         MainPanel.SetActive(false);
         SongPanel.SetActive(true);
-        CreditsPanel.SetActive(false);
     }
 
     public void Quit()

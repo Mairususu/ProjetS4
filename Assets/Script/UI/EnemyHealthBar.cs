@@ -40,5 +40,10 @@ namespace TowerDefense
                     fillImage.fillAmount = health.HealthNormalized;
             }
         }
+
+        public void TakeDamage(float currenthealth, float maxhealth)
+        {
+            fillImage.rectTransform.anchorMax=new Vector2(currenthealth/maxhealth,1);
+        }
     }
 }
