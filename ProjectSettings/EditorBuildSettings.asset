@@ -4,6 +4,18 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/Tests/Bait.unity
+    guid: 00ec918d699538e43bae0fc3ddeb9c16
+  - enabled: 0
+    path: Assets/Scenes/GameScene.unity
+    guid: c0d4f9f0427ef0a498ca662b24673b8a
+  - enabled: 0
+    path: Assets/Scenes/MainMenu.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
+    path: Assets/Tests/Scenes/SceneTest.unity
+    guid: 36b9ccf9fc8c8db4d9b571a79fa617c2
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: b5222809464367145b5bec8bcc0c8cc3, type: 2}
