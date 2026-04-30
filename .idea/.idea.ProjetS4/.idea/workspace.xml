@@ -12,8 +12,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3b861bbf-2051-4e3f-8f27-9f76e288c1ed" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Tests/GameEndTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Tests/TowerShootingsTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Tests/TowerShootingsTest.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,6 +144,7 @@
       <workItem from="1777449067848" duration="293000" />
       <workItem from="1777502572818" duration="2035000" />
       <workItem from="1777540057838" duration="17431000" />
+      <workItem from="1777575482952" duration="473000" />
     </task>
     <servers />
   </component>
