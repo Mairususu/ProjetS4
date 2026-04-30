@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace TowerDefense
 {
@@ -49,9 +50,18 @@ namespace TowerDefense
                     break;
 
                 case GameState.Victory:
+                    StartCoroutine(DelayedReturnToMenu(2f));
+                    break;
                 case GameState.GameOver:
                     break;
             }
+        }
+
+        private IEnumerator DelayedReturnToMenu(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            ChangeState(GameState.MainMenu);
         }
 
         public void LaunchWave()

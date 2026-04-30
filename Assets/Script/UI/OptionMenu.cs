@@ -36,4 +36,15 @@ public class OptionMenu: MonoBehaviour
         }
         isPaused = !isPaused;
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void Menu()
+    {
+        Time.timeScale = 1;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Scenes/MainMenu");
+    }
 }
