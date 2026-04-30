@@ -78,7 +78,6 @@ public class TowerShootingTests
         Object.DestroyImmediate(towerGo);
         Object.DestroyImmediate(projPrefab);
 
-        // Nettoie les projectiles restants
         foreach (var p in Object.FindObjectsOfType<Projectile>())
             Object.DestroyImmediate(p.gameObject);
     }
@@ -86,17 +85,12 @@ public class TowerShootingTests
     [UnityTest]
     public IEnumerator TowerShootsAndDamagesEnemy_Successfully()
     {
-        // 1. On s'assure que le prefab est prêt
         projPrefab.SetActive(true); 
-    
-        // 2. On empêche FindTarget d'écraser notre cible de test
         towerBase.enabled = false; 
         towerBase.SetTargetForTest(enemyGo.transform);
 
         Assert.AreEqual(1f, enemyHealth.HealthNormalized, 0.001f);
 
-        // 3. On attend un peu plus pour laisser le temps au projectile de voyager
-        // Si la vitesse est de 50 et la distance de 2, il faut 0.04s + temps de réaction
         yield return new WaitForSeconds(0.2f);
 
         Assert.Less(enemyHealth.HealthNormalized, 1f, "L'ennemi n'a subi aucun dégât.");
@@ -105,12 +99,14 @@ public class TowerShootingTests
     [UnityTest]
     public IEnumerator TowerDoesNotShoot_WhenNoTarget()
     {
-        towerBase.SetTargetForTest(null); // ← retire la cible
+        towerAttack.enabled = false;
+        towerBase.SetTargetForTest(null); 
+        towerAttack.enabled = true;
 
         yield return new WaitForSeconds(0.3f);
 
         Assert.AreEqual(1f, enemyHealth.HealthNormalized, 0.001f,
-            "La tour a tiré sans cible.");
+            "La tour a tiré alors qu'elle n'avait plus de cible.");
     }
 
     private static void SetPrivate(object obj, string fieldName, object value)

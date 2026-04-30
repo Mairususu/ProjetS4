@@ -55,17 +55,21 @@ namespace TowerDefense
 
         private void Fire(Transform target)
         {
+            if (target == null) return; 
             if (firePoints == null || firePoints.Length == 0) return;
             if (projectilePrefab == null) return;
-    audioSource.Play();
+
             for (int i = 0; i < projectileCount; i++)
             {
                 Transform fp = firePoints[i % firePoints.Length];
                 if (fp == null) continue;
 
                 GameObject go = Instantiate(projectilePrefab, fp.position, fp.rotation);
+        
                 if (go.TryGetComponent<Projectile>(out var proj))
+                {
                     proj.Initialize(target, projectileSpeed, damage);
+                }
             }
         }
     }
