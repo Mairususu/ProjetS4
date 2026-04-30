@@ -18,7 +18,7 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  maxHealth: 120
-  moveSpeed: 4
-  scoreValue: 100
+  maxHealth: 200
+  moveSpeed: 1.5
+  scoreValue: 30
   reward: 20

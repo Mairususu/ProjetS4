@@ -12,20 +12,28 @@
   <component name="ChangeListManager">
     <list default="true" id="3b861bbf-2051-4e3f-8f27-9f76e288c1ed" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjetS4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProjetS4/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Mage/Mage.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Mage/Mage.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Mage/Skeleton_Mage.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Mage/Skeleton_Mage.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Minions/Minions.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Minions/Minions.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Minions/Skeleton.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Minions/Skeleton.controller" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Minions/Skeleton_Minion.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Minions/Skeleton_Minion.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Rogue/Rogue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Rogue/Rogue.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Rogue/Skeleton_Rogue.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Rogue/Skeleton_Rogue.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Warrior/Skeleton_Warrior.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Warrior/Skeleton_Warrior.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Tests/Bait.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Tests/Bait.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Camera/CameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Camera/CameraController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Core/WaveManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Core/WaveManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Enemy/Enemy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Enemy/Enemy.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Enemy/EnemySpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Enemy/EnemySpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Warrior/Warrior.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy/Warrior/Warrior.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Towers/Baliste/BalisteSO.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Towers/Baliste/BalisteSO.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Towers/Baliste/BalisteTower.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Towers/Baliste/BalisteTower.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Towers/Canon/CanonSO.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Towers/Canon/CanonSO.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Towers/Canon/CanonTower.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Towers/Canon/CanonTower.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Towers/Catapult/CatapultSO.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Towers/Catapult/CatapultSO.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Towers/Catapult/CatapultTower.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Towers/Catapult/CatapultTower.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Towers/Turret/TurretSO.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Towers/Turret/TurretSO.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Towers/Turret/TurretTower.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Towers/Turret/TurretTower.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Waves/Wave1.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Waves/Wave1.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Tests/Bait/NavMesh-[Chemin] 1.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Tests/Bait/NavMesh-[Chemin] 1.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Script/Path/PathFollower.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Path/PathFollower.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Tower/TowerAttack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Tower/TowerAttack.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Script/Tower/TowerBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Tower/TowerBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,10 +87,9 @@
       <option name="PROGRAM_PARAMETERS" value="-projectPath C:\Users\miles\Gitdir\ProjetS4 -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\miles\Gitdir\ProjetS4" />
       <option name="PASS_PARENT_ENVS" value="1" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="ENV_FILE_PATHS" value="" />
       <option name="REDIRECT_INPUT_PATH" value="" />
-      <option name="PTY_MODE" value="Auto" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
@@ -90,13 +97,12 @@
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath C:\Users\miles\Gitdir\ProjetS4 -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\miles\Gitdir\ProjetS4" />
       <option name="PASS_PARENT_ENVS" value="1" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="ENV_FILE_PATHS" value="" />
       <option name="REDIRECT_INPUT_PATH" value="" />
-      <option name="PTY_MODE" value="Auto" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
@@ -107,10 +113,9 @@
       <option name="selectedOptions">
         <list />
       </option>
-      <option name="useMixedMode" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
@@ -121,7 +126,6 @@
       <option name="selectedOptions">
         <list />
       </option>
-      <option name="useMixedMode" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="Attach to" type="UnityDevicePlayer" factoryName="UnityAttachToDevicePlayer">
@@ -148,7 +152,8 @@
       <workItem from="1777411891996" duration="22000" />
       <workItem from="1777449010088" duration="4000" />
       <workItem from="1777449067848" duration="293000" />
-      <workItem from="1777502572818" duration="1649000" />
+      <workItem from="1777502572818" duration="2035000" />
+      <workItem from="1777540057838" duration="3186000" />
     </task>
     <servers />
   </component>

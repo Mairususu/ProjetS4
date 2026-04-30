@@ -19,23 +19,23 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 1
-  purchaseCost: 100
+  purchaseCost: 150
   levels:
   - upgradeCost: 0
     projectileCount: 1
-    fireRate: 0.5
-    projectileSpeed: 10
-    damage: 15
-    range: 5
-  - upgradeCost: 75
+    fireRate: 2
+    projectileSpeed: 15
+    damage: 35
+    range: 8
+  - upgradeCost: 120
+    projectileCount: 1
+    fireRate: 1.6
+    projectileSpeed: 18
+    damage: 55
+    range: 10
+  - upgradeCost: 200
     projectileCount: 2
-    fireRate: 0.4
-    projectileSpeed: 12
-    damage: 0
-    range: 6
-  - upgradeCost: 150
-    projectileCount: 2
-    fireRate: 0.3
-    projectileSpeed: 14
-    damage: 30
-    range: 7
+    fireRate: 1.2
+    projectileSpeed: 22
+    damage: 80
+    range: 12

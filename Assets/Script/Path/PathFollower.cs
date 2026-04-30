@@ -9,24 +9,19 @@ namespace TowerDefense
     {
         public static readonly System.Collections.Generic.HashSet<PathFollower> ActiveFollowers = new();
 
-        [Tooltip("Distance en dessous de laquelle on considère l'ennemi arrivé au point B")]
         [SerializeField] private float arrivalTolerance = 0.5f;
-
-        [Tooltip("Vitesse de rotation visuelle vers la direction de déplacement")]
-        [SerializeField] private float rotationSpeed = 10f;
+        [SerializeField] private float rotationSpeed    = 10f;
 
         [Header("Fix rotation")]
-        [Tooltip("Offset Y appliqué au modèle si le mesh est orienté à l'envers. 180 si l'ennemi recule.")]
-        [SerializeField] private float modelRotationOffsetY = 180f;
-
-        [Tooltip("Transform du modèle visuel enfant. Si null, utilise ce GameObject.")]
+        [SerializeField] private float     modelRotationOffsetY = 180f;
         [SerializeField] private Transform modelRoot;
 
         public float Progress  { get; private set; }
         public bool  IsArrived { get; private set; }
+
         private NavMeshAgent  agent;
         private EnemyAnimator anim;
-        private float         totalDistance;
+        private int           currentWaypointIndex;
         private bool          initialized;
 
         private void Awake()
@@ -36,6 +31,7 @@ namespace TowerDefense
 
             agent.updateRotation = false;
             agent.updateUpAxis   = false;
+
             if (modelRoot != null)
                 modelRoot.localRotation = Quaternion.Euler(0f, modelRotationOffsetY, 0f);
         }
@@ -52,8 +48,10 @@ namespace TowerDefense
                 return;
             }
 
-            IsArrived   = false;
-            initialized = false;
+            IsArrived            = false;
+            initialized          = false;
+            currentWaypointIndex = 0;
+
             agent.speed            = speed;
             agent.stoppingDistance = arrivalTolerance;
 
@@ -64,47 +62,65 @@ namespace TowerDefense
                 return;
             }
 
-            agent.SetDestination(PathDefinition.Instance.EndPoint);
-            totalDistance = Vector3.Distance(
-                PathDefinition.Instance.StartPoint,
-                PathDefinition.Instance.EndPoint);
-
             initialized = true;
             anim?.SetWalking(true);
+
+            currentWaypointIndex = 1;
+            GoToCurrentWaypoint();
         }
 
         private void Update()
         {
             if (!initialized || IsArrived) return;
+
             UpdateProgress();
             UpdateRotation();
             CheckArrival();
+        }
+
+        private void GoToCurrentWaypoint()
+        {
+            if (currentWaypointIndex >= PathDefinition.Instance.WaypointCount)
+            {
+                OnReachedEnd();
+                return;
+            }
+
+            Vector3 target = PathDefinition.Instance.GetWaypoint(currentWaypointIndex);
+            agent.SetDestination(target);
+        }
+
+        private void CheckArrival()
+        {
+            if (agent.pathPending) return;
+
+            if (agent.remainingDistance > arrivalTolerance) return;
+
+            if (currentWaypointIndex >= PathDefinition.Instance.WaypointCount - 1)
+            {
+                OnReachedEnd();
+                return;
+            }
+
+            currentWaypointIndex++;
+            GoToCurrentWaypoint();
         }
 
         private void UpdateRotation()
         {
             if (agent.velocity.sqrMagnitude < 0.01f) return;
 
-            Vector3    moveDir   = new Vector3(agent.velocity.x, 0f, agent.velocity.z).normalized;
-            Quaternion targetRot = Quaternion.LookRotation(moveDir);
+            Vector3    dir       = new Vector3(agent.velocity.x, 0f, agent.velocity.z).normalized;
+            Quaternion targetRot = Quaternion.LookRotation(dir);
             transform.rotation   = Quaternion.Lerp(
                 transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
         }
 
-
         private void UpdateProgress()
         {
-            if (agent.pathPending || totalDistance <= 0f) return;
-            Progress = Mathf.Clamp01(1f - (agent.remainingDistance / totalDistance));
-        }
-
-        private void CheckArrival()
-        {
-            if (agent.pathPending) return;
-            if (agent.remainingDistance > arrivalTolerance) return;
-            if (agent.velocity.sqrMagnitude > 0.04f) return;
-
-            OnReachedEnd();
+            if (PathDefinition.Instance.WaypointCount <= 1) { Progress = 1f; return; }
+            Progress = Mathf.Clamp01(
+                (float)currentWaypointIndex / (PathDefinition.Instance.WaypointCount - 1));
         }
 
         private void OnReachedEnd()
@@ -119,6 +135,14 @@ namespace TowerDefense
             Destroy(gameObject);
         }
 
-      
+        private void OnDrawGizmos()
+        {
+            if (!initialized || agent == null || !agent.hasPath) return;
+
+            Gizmos.color = Color.red;
+            Vector3[] corners = agent.path.corners;
+            for (int i = 0; i < corners.Length - 1; i++)
+                Gizmos.DrawLine(corners[i], corners[i + 1]);
+        }
     }
 }
